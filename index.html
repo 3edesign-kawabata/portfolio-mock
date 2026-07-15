@@ -71,32 +71,26 @@
     .work_grid_wrap { margin-bottom: 112px; }
   }
 
-  /* グリッド本体（.entry-list-wrp-3: 3列 / margin-right 12.5% / 3の倍数で0） */
+  /* グリッド本体（CSS Grid化。列間gapは12.5%相当・行間gapは96pxを維持） */
   .work_grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 12.5%;
+    row-gap: 96px;
   }
 
   .work_card {
     position: relative;
-    width: 25%;
-    margin-right: 12.5%;
-    margin-bottom: 96px;
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background: #000;
   }
 
-  .work_card:nth-child(3n) {
-    margin-right: 0;
-  }
-
   @media (max-width: 768px) {
-    .work_card {
-      width: 47%;
-      margin-right: 0;
-      margin-bottom: 20px;
+    .work_grid {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 6%;
+      row-gap: 20px;
     }
   }
 
