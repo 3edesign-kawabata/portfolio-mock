@@ -9,28 +9,38 @@
 <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon-180x180.png" sizes="180x180">
 
 <style>
-  :root {
-    --bg: #fff;
-    --fg: #111;
-    --overlay-bg: rgba(0,0,0,0.7);
-  }
-
+  /*
+    余白・タイポグラフィの数値は https://www.awatsujidesign.com/works/ の
+    実CSS（aw-theme/asset/css/style.css）から抽出した値をそのまま使用。
+  */
   * { box-sizing: border-box; }
+
+  html { font-size: 62.5%; } /* 1rem = 10px, AWATSUJIと同じ基準 */
 
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--fg);
+    background: #fff;
+    color: #111;
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic Medium", "Meiryo", sans-serif;
   }
 
+  /* ヘッダー〜見出し（.l-container.works 相当） */
   header {
-    padding: 40px 20px 20px;
+    margin-top: 104px;
+    padding-top: 48px;
+    padding-bottom: 0;
     text-align: center;
   }
 
+  @media (max-width: 768px) {
+    header {
+      margin-top: 64px;
+      padding-top: 48px;
+    }
+  }
+
   header h1 {
-    font-size: 18px;
+    font-size: 1.8rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     margin: 0;
@@ -38,28 +48,56 @@
 
   header p {
     margin: 8px 0 0;
-    font-size: 12px;
+    font-size: 1.2rem;
     color: #888;
   }
 
+  /* 見出し〜グリッド（.mgn-bottom-high: --size-high / --size-high-s） */
+  header {
+    margin-bottom: 120px;
+  }
+  @media (max-width: 768px) {
+    header { margin-bottom: 84px; }
+  }
+
+  /* コンテナ左右余白（.pd-side: padding-left/right 5%、max-widthなしのフルード） */
+  .work_grid_wrap {
+    padding-left: 5%;
+    padding-right: 5%;
+    /* グリッド〜フッター（.works-thumbs-box-mgn-bottom） */
+    margin-bottom: 52px;
+  }
+  @media (max-width: 768px) {
+    .work_grid_wrap { margin-bottom: 112px; }
+  }
+
+  /* グリッド本体（.entry-list-wrp-3: 3列 / margin-right 12.5% / 3の倍数で0） */
   .work_grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media (max-width: 900px) {
-    .work_grid { grid-template-columns: repeat(3, 1fr); }
-  }
-
-  @media (max-width: 600px) {
-    .work_grid { grid-template-columns: repeat(2, 1fr); }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 
   .work_card {
     position: relative;
+    width: 25%;
+    margin-right: 12.5%;
+    margin-bottom: 96px;
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background: #000;
+  }
+
+  .work_card:nth-child(3n) {
+    margin-right: 0;
+  }
+
+  @media (max-width: 768px) {
+    .work_card {
+      width: 47%;
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
   }
 
   .work_card img {
@@ -68,62 +106,45 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.9;
-    transition: opacity 0.35s, transform 0.35s;
   }
 
-  .work_card:hover img {
+  /* hover時に画像全体を覆う黒半透明レイヤー＋中央タイトル（.entry-cover / .entry-cover-title） */
+  .work_cover {
+    position: absolute;
+    inset: 0;
+    display: block;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    transition: all .8s ease-out;
+  }
+
+  .work_card:hover .work_cover {
+    background: rgba(0, 0, 0, .6);
     opacity: 1;
-    transform: scale(1.05);
+    cursor: pointer;
   }
 
   .work_title {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 12px 15px;
-    font-size: 13px;
-    line-height: 1.5;
-    color: #fff;
-    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
-    z-index: 5;
-  }
-
-  .work_client {
-    position: absolute;
-    left: 0;
-    bottom: 0;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
     width: 100%;
-    z-index: 10;
-    font-size: 14px;
-    line-height: 1.6;
-    transform: translate3d(0, 101%, 0);
-    transition: transform 0.35s;
-  }
-
-  .work_client span {
-    display: block;
-    width: 100%;
-    background: var(--overlay-bg);
+    text-align: center;
+    font-weight: 100;
+    font-size: 1.6rem;
     color: #fff;
-    padding: 15.8px;
+    line-height: 1.75;
+    letter-spacing: .1em;
   }
 
-  .work_client .label {
+  .work_title .label {
     display: block;
-    font-size: 10px;
-    letter-spacing: 0.1em;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: .15em;
     color: #ccc;
-    margin-bottom: 2px;
-  }
-
-  .work_card:hover .work_client {
-    transform: translate3d(0, 1px, 0);
-  }
-
-  .work_card:hover .work_title {
-    opacity: 0;
+    margin-bottom: 4px;
   }
 </style>
 </head>
@@ -134,7 +155,9 @@
   <p>portfolio-mock / grid layout prototype</p>
 </header>
 
-<div class="work_grid" id="work_grid"></div>
+<div class="work_grid_wrap">
+  <div class="work_grid" id="work_grid"></div>
+</div>
 
 <script>
 fetch('works.json')
@@ -144,8 +167,9 @@ fetch('works.json')
     grid.innerHTML = works.map(w => `
       <div class="work_card">
         <img src="${w.image}" alt="${w.title}" loading="lazy">
-        <div class="work_title">${w.title}</div>
-        <div class="work_client"><span><span class="label">CLIENT</span>${w.title}</span></div>
+        <a class="work_cover" href="#">
+          <span class="work_title"><span class="label">CLIENT</span>${w.title}</span>
+        </a>
       </div>
     `).join('');
   });
